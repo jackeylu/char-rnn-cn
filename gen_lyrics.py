@@ -98,8 +98,9 @@ class Model():
                 tf.int32, [args.batch_size, args.seq_length])
 
         with tf.name_scope('model'):
-            self.cell = rnn_cell.BasicLSTMCell(args.state_size)
-            self.cell = rnn_cell.MultiRNNCell([self.cell] * args.num_layers)
+            # self.cell = rnn_cell.BasicLSTMCell(args.state_size)
+            self.cell = rnn_cell.MultiRNNCell([rnn_cell.BasicLSTMCell( \
+                args.state_size) for _ in range(args.num_layers)])
             self.initial_state = self.cell.zero_state(
                 args.batch_size, tf.float32)
             with tf.variable_scope('rnnlm'):
